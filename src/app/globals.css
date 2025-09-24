@@ -15,12 +15,14 @@ html {
   text-rendering: optimizeLegibility;
 }
 
-/* Normalizar scrollbars entre Edge y Chrome */
+/* Normalizar scrollbars entre Edge y Chrome con fallbacks mejorados */
 * {
+  /* Solo aplicar si está soportado */
   scrollbar-width: thin;
-  scrollbar-color: rgb(156 163 175 / 0.5) transparent;
+  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
 }
 
+/* Webkit scrollbars (Chrome, Safari, Edge Chromium) */
 *::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -31,13 +33,13 @@ html {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: rgb(156 163 175 / 0.5);
+  background-color: rgba(156, 163, 175, 0.5);
   border-radius: 3px;
   border: none;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background-color: rgb(156 163 175 / 0.8);
+  background-color: rgba(156, 163, 175, 0.8);
 }
 
 /* Mejorar compatibilidad de flexbox */
@@ -174,6 +176,7 @@ html {
   html {
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%; /* Estándar moderno */
   }
   
   /* Asegurar que los elementos no desborden la pantalla */
