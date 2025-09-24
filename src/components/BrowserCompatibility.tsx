@@ -16,9 +16,9 @@ export default function BrowserCompatibility() {
         document.body.classList.add('no-oklch');
       }
       
-      // Mejorar renderizado de texto en Edge
-      document.body.style.WebkitFontSmoothing = 'antialiased';
-      document.body.style.textRendering = 'optimizeLegibility';
+      // Mejorar renderizado de texto en Edge con setProperty
+      document.body.style.setProperty('-webkit-font-smoothing', 'antialiased');
+      document.body.style.setProperty('text-rendering', 'optimizeLegibility');
     }
     
     if (isChrome) {
