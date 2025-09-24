@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import BrowserCompatibility from "@/components/BrowserCompatibility";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -37,6 +38,7 @@ export default function RootLayout({
         className={`${inter.variable} font-sans antialiased min-h-screen`}
         suppressHydrationWarning
       >
+        <BrowserCompatibility />
         {children}
       </body>
     </html>

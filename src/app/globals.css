@@ -3,6 +3,56 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Mejorar compatibilidad entre navegadores */
+* {
+  box-sizing: border-box;
+}
+
+/* Mejorar renderizado de fuentes en Edge */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Normalizar scrollbars entre Edge y Chrome */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(156 163 175 / 0.5) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(156 163 175 / 0.5);
+  border-radius: 3px;
+  border: none;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(156 163 175 / 0.8);
+}
+
+/* Mejorar compatibilidad de flexbox */
+.flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+/* Asegurar que CSS Grid funcione igual */
+.grid {
+  display: -ms-grid;
+  display: grid;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -161,6 +211,71 @@
   html {
     scroll-behavior: smooth;
   }
+}
+
+/* Mejoras específicas para Microsoft Edge */
+@supports (-ms-ime-align: auto) {
+  /* Estilos específicos para Edge Legacy */
+  .flex {
+    display: -ms-flexbox;
+    display: flex;
+  }
   
-  /* Mejorar el scroll en dispositivos táctiles - removido para mejor compatibilidad */
+  .grid {
+    display: -ms-grid;
+    display: grid;
+  }
+}
+
+/* Mejoras para Edge Chromium */
+@supports (backdrop-filter: blur(10px)) {
+  /* Asegurar que backdrop-filter funcione bien */
+  .backdrop-blur-sm {
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* Normalizar diferencias de renderizado entre navegadores */
+.button, [role="button"], button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: none;
+  border: none;
+  outline: inherit;
+}
+
+/* Mejorar compatibilidad de CSS custom properties */
+:root {
+  /* Fallbacks para navegadores que no soportan oklch */
+  --background-fallback: #ffffff;
+  --foreground-fallback: #0f172a;
+  --primary-fallback: #1e293b;
+  --secondary-fallback: #f8fafc;
+  --muted-fallback: #f1f5f9;
+  --border-fallback: #e2e8f0;
+}
+
+/* Estilos para mejorar consistencia visual */
+.shadcn-component {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Asegurar que los dropdowns y modals se vean igual */
+[data-radix-popper-content-wrapper] {
+  transform-origin: var(--radix-popper-transform-origin);
+  will-change: transform, opacity;
+}
+
+/* Mejorar performance de animaciones */
+* {
+  will-change: auto;
+}
+
+.animate-in, .animate-out {
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
