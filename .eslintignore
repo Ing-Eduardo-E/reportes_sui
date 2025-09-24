@@ -1,0 +1,1 @@
+# Archivos generados\nsrc/generated/\n.next/\nout/\nbuild/\nnode_modules/\n# Archivos de Prisma WASM\n*.wasm\n*.js\n!next.config.js\n!eslint.config.mjs\n!tailwind.config.js\n!src/**/*.js\n!scripts/**/*.js

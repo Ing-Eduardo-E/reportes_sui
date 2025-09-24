@@ -1,0 +1,96 @@
+{
+  "categories": [
+    {
+      "id": "formularios-online",
+      "name": "Formularios en Línea",
+      "description": "Tutoriales para el manejo de formularios en línea",
+      "color": "bg-blue-500",
+      "icon": "UserPlus"
+    },
+    {
+      "id": "formulario-no-aplican",
+      "name": "Formulario No Aplican",
+      "description": "Formularios que no aplican según criterios específicos",
+      "color": "bg-red-500",
+      "icon": "UserX"
+    },
+    {
+      "id": "cargue-masivo",
+      "name": "Cargue Masivo",
+      "description": "Procedimientos para carga masiva de datos",
+      "color": "bg-green-500",
+      "icon": "Upload"
+    },
+    {
+      "id": "reportes",
+      "name": "Reportes",
+      "description": "Generación y manejo de reportes del sistema",
+      "color": "bg-purple-500",
+      "icon": "FileText"
+    },
+    {
+      "id": "validaciones",
+      "name": "Validaciones",
+      "description": "Procesos de validación y verificación de datos",
+      "color": "bg-orange-500",
+      "icon": "CheckCircle"
+    }
+  ],
+  "tutorials": [
+    {
+      "id": "tutorial-1",
+      "title": "Cómo llenar formularios en línea",
+      "description": "Guía paso a paso para completar formularios en línea correctamente",
+      "category": "formularios-online",
+      "oneDriveUrl": "https://1drv.ms/v/ejemplo1",
+      "duration": "8:30",
+      "createdAt": "2024-01-15T10:00:00Z",
+      "updatedAt": "2024-01-15T10:00:00Z",
+      "tags": ["formularios", "en línea", "tutorial"]
+    },
+    {
+      "id": "tutorial-2",
+      "title": "Identificar formularios que no aplican",
+      "description": "Criterios para determinar cuándo un formulario no aplica según las condiciones",
+      "category": "formulario-no-aplican",
+      "oneDriveUrl": "https://1drv.ms/v/ejemplo2",
+      "duration": "12:15",
+      "createdAt": "2024-01-16T14:30:00Z",
+      "updatedAt": "2024-01-16T14:30:00Z",
+      "tags": ["formularios", "no aplican", "criterios"]
+    },
+    {
+      "id": "tutorial-3",
+      "title": "Proceso de cargue masivo de datos",
+      "description": "Cómo realizar cargas masivas de información de manera eficiente",
+      "category": "cargue-masivo",
+      "oneDriveUrl": "https://1drv.ms/v/ejemplo3",
+      "duration": "15:45",
+      "createdAt": "2024-01-17T09:15:00Z",
+      "updatedAt": "2024-01-17T09:15:00Z",
+      "tags": ["cargue", "masivo", "datos", "eficiencia"]
+    },
+    {
+      "id": "tutorial-4",
+      "title": "Generar reportes del sistema",
+      "description": "Guía completa para generar diferentes tipos de reportes",
+      "category": "reportes",
+      "oneDriveUrl": "https://1drv.ms/v/ejemplo4",
+      "duration": "10:20",
+      "createdAt": "2024-01-18T11:00:00Z",
+      "updatedAt": "2024-01-18T11:00:00Z",
+      "tags": ["reportes", "generación", "sistema"]
+    },
+    {
+      "id": "tutorial-5",
+      "title": "Validación de información ingresada",
+      "description": "Procedimientos para validar y verificar la información del sistema",
+      "category": "validaciones",
+      "oneDriveUrl": "https://1drv.ms/v/ejemplo5",
+      "duration": "9:30",
+      "createdAt": "2024-01-19T16:30:00Z",
+      "updatedAt": "2024-01-19T16:30:00Z",
+      "tags": ["validación", "verificación", "información"]
+    }
+  ]
+}
