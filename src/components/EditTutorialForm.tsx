@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Link } from 'lucide-react';
-import { Category } from '@/types';
+import { Category, Tutorial } from '@/types';
 
 const tutorialSchema = z.object({
   title: z.string().min(1, 'El título es requerido'),
@@ -20,39 +20,56 @@ const tutorialSchema = z.object({
 
 type TutorialFormData = z.infer<typeof tutorialSchema>;
 
-interface AddTutorialFormProps {
+interface EditTutorialFormProps {
+  tutorial: Tutorial;
   categories: Category[];
-  onSubmit: (data: TutorialFormData) => void;
+  onSubmit: (data: Tutorial) => void;
   onCancel: () => void;
   loading?: boolean;
 }
 
-export default function AddTutorialForm({ 
+export default function EditTutorialForm({ 
+  tutorial,
   categories, 
   onSubmit, 
   onCancel, 
   loading = false 
-}: AddTutorialFormProps) {
+}: EditTutorialFormProps) {
   const [error, setError] = useState('');
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    setValue
   } = useForm<TutorialFormData>({
-    resolver: zodResolver(tutorialSchema)
+    resolver: zodResolver(tutorialSchema),
+    defaultValues: {
+      title: tutorial.title,
+      description: tutorial.description,
+      category: tutorial.category,
+      oneDriveUrl: tutorial.oneDriveUrl
+    }
   });
 
-
+  // Establecer valores iniciales
+  useEffect(() => {
+    setValue('title', tutorial.title);
+    setValue('description', tutorial.description);
+    setValue('category', tutorial.category);
+    setValue('oneDriveUrl', tutorial.oneDriveUrl);
+  }, [tutorial, setValue]);
 
   const onFormSubmit = async (data: TutorialFormData) => {
     try {
       setError('');
-      await onSubmit(data);
-      reset();
+      const updatedTutorial = {
+        ...tutorial,
+        ...data
+      };
+      await onSubmit(updatedTutorial);
     } catch {
-      setError('Error al crear el tutorial');
+      setError('Error al actualizar el tutorial');
     }
   };
 
@@ -60,10 +77,10 @@ export default function AddTutorialForm({
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-gray-900">
-          Agregar Nuevo Tutorial
+          Editar Tutorial
         </CardTitle>
         <CardDescription className="text-gray-600">
-          Completa la información del tutorial para agregarlo al sistema
+          Modifica la información del tutorial
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -142,10 +159,6 @@ export default function AddTutorialForm({
             )}
           </div>
 
-
-
-
-
           {/* Botones */}
           <div className="flex space-x-4 pt-6">
             <button
@@ -169,7 +182,7 @@ export default function AddTutorialForm({
                 }
               }}
             >
-              {loading ? 'Creando Tutorial...' : '✅ Crear Tutorial'}
+              {loading ? 'Actualizando...' : '✅ Actualizar Tutorial'}
             </button>
             <button
               type="button"

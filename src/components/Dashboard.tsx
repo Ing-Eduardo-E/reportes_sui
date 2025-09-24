@@ -11,8 +11,6 @@ import {
   LogOut, 
   Search, 
   Play, 
-  Clock, 
-  Tag, 
   Filter,
   Grid3X3,
   List,
@@ -23,11 +21,14 @@ import {
   CheckCircle,
   Settings,
   Plus,
-  Users
+  Users,
+  Edit,
+  Trash2
 } from 'lucide-react';
 import { Tutorial, User } from '@/types';
 import { useTutorials } from '@/hooks/use-tutorials';
 import AddTutorialForm from './AddTutorialForm';
+import EditTutorialForm from './EditTutorialForm';
 import UserManagement from './UserManagement';
 import Logo from './Logo';
 
@@ -46,19 +47,22 @@ const iconMap = {
 };
 
 export default function Dashboard({ user, onLogout }: DashboardProps) {
-  const { tutorials, categories, loading: tutorialsLoading, addTutorial } = useTutorials();
+  const { tutorials, categories, loading: tutorialsLoading, addTutorial, updateTutorial, deleteTutorial } = useTutorials();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [selectedTutorial, setSelectedTutorial] = useState<Tutorial | null>(null);
   const [addingTutorial, setAddingTutorial] = useState(false);
+  const [editingTutorial, setEditingTutorial] = useState(false);
+  const [deletingTutorial, setDeletingTutorial] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<'tutorials' | 'users'>('tutorials');
 
   // Filtrar tutoriales
   const filteredTutorials = tutorials.filter(tutorial => {
     const matchesSearch = tutorial.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         tutorial.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         tutorial.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+                         tutorial.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || tutorial.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
@@ -85,8 +89,6 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
     description: string;
     category: string;
     oneDriveUrl: string;
-    duration?: string;
-    tags: string[];
   }) => {
     setAddingTutorial(true);
     const success = await addTutorial(tutorialData);
@@ -94,6 +96,35 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
     
     if (success) {
       setShowAddForm(false);
+    }
+  };
+
+  const handleEditTutorial = (tutorial: Tutorial) => {
+    setSelectedTutorial(tutorial);
+    setShowEditForm(true);
+  };
+
+  const handleUpdateTutorial = async (tutorialData: Tutorial) => {
+    setEditingTutorial(true);
+    const success = await updateTutorial(tutorialData);
+    setEditingTutorial(false);
+    
+    if (success) {
+      setShowEditForm(false);
+      setSelectedTutorial(null);
+    }
+  };
+
+  const handleDeleteTutorial = async (tutorialId: string) => {
+    if (window.confirm('¿Estás seguro de que deseas eliminar este tutorial? Esta acción no se puede deshacer.')) {
+      setDeletingTutorial(tutorialId);
+      const success = await deleteTutorial(tutorialId);
+      setDeletingTutorial(null);
+      
+      if (!success) {
+        // El error ya se maneja en el hook
+        alert('Error al eliminar el tutorial');
+      }
     }
   };
 
@@ -120,11 +151,56 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
               <p className="text-xs lg:text-sm text-gray-500 truncate">Bienvenido, {user.username}</p>
             </div>
           </div>
-          <Button variant="outline" onClick={onLogout} className="flex items-center space-x-2 flex-shrink-0">
-            <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">Cerrar Sesión</span>
-            <span className="sm:hidden">Salir</span>
-          </Button>
+          <div className="flex items-center space-x-3">
+            {/* Botón Agregar Tutorial - Solo SUPERUSER */}
+            {user.role === 'SUPERUSER' && (
+              <button
+                onClick={() => setShowAddForm(true)}
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white rounded-md shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                style={{
+                  backgroundColor: '#1d4ed8',
+                  border: '1px solid #1d4ed8'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#1e40af';
+                  e.currentTarget.style.borderColor = '#1e40af';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#1d4ed8';
+                  e.currentTarget.style.borderColor = '#1d4ed8';
+                }}
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                <span className="hidden sm:inline">Agregar Tutorial</span>
+                <span className="sm:hidden">Agregar</span>
+              </button>
+            )}
+            {/* Botón Cerrar Sesión */}
+            <button
+              onClick={onLogout}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              style={{
+                backgroundColor: '#ffffff',
+                color: '#1f2937',
+                border: '3px solid #ef4444',
+                fontWeight: 'bold'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#fef2f2';
+                e.currentTarget.style.borderColor = '#dc2626';
+                e.currentTarget.style.color = '#dc2626';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#ffffff';
+                e.currentTarget.style.borderColor = '#ef4444';
+                e.currentTarget.style.color = '#1f2937';
+              }}
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              <span className="hidden sm:inline">🚪 Cerrar Sesión</span>
+              <span className="sm:hidden">🚪 Salir</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -145,75 +221,75 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                       onClick={() => setCurrentView('tutorials')}
                       className="flex-1 lg:w-full justify-start"
                     >
-                    <Play className="w-4 h-4 mr-2" />
-                    Tutoriales
-                  </Button>
-                  {user.role === 'SUPERUSER' && (
-                    <Button
-                      variant={currentView === 'users' ? 'default' : 'ghost'}
-                      size="sm"
-                      onClick={() => setCurrentView('users')}
-                      className="flex-1 lg:w-full justify-start"
-                    >
-                      <Users className="w-4 h-4 mr-2" />
-                      Usuarios
+                      <Play className="w-4 h-4 mr-2" />
+                      Tutoriales
                     </Button>
-                  )}
-                </div>
-              </div>
-
-              {/* Búsqueda y filtros - solo mostrar en vista de tutoriales */}
-              {currentView === 'tutorials' && (
-                <>
-                  {/* Búsqueda */}
-                  <div className="relative">
-                    <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-                    <Input
-                      placeholder="Buscar tutoriales..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-
-                  {/* Filtros de categoría */}
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-gray-900 flex items-center">
-                      <Filter className="w-4 h-4 mr-2" />
-                      Categorías
-                    </h3>
-                    <div className="space-y-1">
+                    {user.role === 'SUPERUSER' && (
                       <Button
-                        variant={selectedCategory === 'all' ? 'default' : 'ghost'}
+                        variant={currentView === 'users' ? 'default' : 'ghost'}
                         size="sm"
-                        onClick={() => setSelectedCategory('all')}
-                        className="w-full justify-start"
+                        onClick={() => setCurrentView('users')}
+                        className="flex-1 lg:w-full justify-start"
                       >
-                        Todas ({tutorials.length})
+                        <Users className="w-4 h-4 mr-2" />
+                        Usuarios
                       </Button>
-                      {categories.map((category) => {
-                        const Icon = iconMap[category.icon as keyof typeof iconMap] || Settings;
-                        const count = tutorials.filter(t => t.category === category.id).length;
-                        return (
-                          <Button
-                            key={category.id}
-                            variant={selectedCategory === category.id ? 'default' : 'ghost'}
-                            size="sm"
-                            onClick={() => setSelectedCategory(category.id)}
-                            className="w-full justify-start"
-                          >
-                            <Icon className="w-4 h-4 mr-2" />
-                            {category.name} ({count})
-                          </Button>
-                        );
-                      })}
-                    </div>
+                    )}
                   </div>
-                </>
-              )}
+                </div>
+
+                {/* Búsqueda y filtros - solo mostrar en vista de tutoriales */}
+                {currentView === 'tutorials' && (
+                  <>
+                    {/* Búsqueda */}
+                    <div className="relative">
+                      <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                      <Input
+                        placeholder="Buscar tutoriales..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-10"
+                      />
+                    </div>
+
+                    {/* Filtros de categoría */}
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-gray-900 flex items-center">
+                        <Filter className="w-4 h-4 mr-2" />
+                        Categorías
+                      </h3>
+                      <div className="space-y-1">
+                        <Button
+                          variant={selectedCategory === 'all' ? 'default' : 'ghost'}
+                          size="sm"
+                          onClick={() => setSelectedCategory('all')}
+                          className="w-full justify-start"
+                        >
+                          Todas ({tutorials.length})
+                        </Button>
+                        {categories.map((category) => {
+                          const Icon = iconMap[category.icon as keyof typeof iconMap] || Settings;
+                          const count = tutorials.filter(t => t.category === category.id).length;
+                          return (
+                            <Button
+                              key={category.id}
+                              variant={selectedCategory === category.id ? 'default' : 'ghost'}
+                              size="sm"
+                              onClick={() => setSelectedCategory(category.id)}
+                              className="w-full justify-start"
+                            >
+                              <Icon className="w-4 h-4 mr-2" />
+                              {category.name} ({count})
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        </aside>
+          </aside>
 
           {/* Main Content */}
           <main className="flex-1 p-4 lg:p-6 lg:overflow-y-auto lg:h-full">
@@ -231,137 +307,237 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                         {searchTerm && ` encontrado${filteredTutorials.length !== 1 ? 's' : ''} para "${searchTerm}"`}
                       </p>
                     </div>
-                  <div className="flex items-center space-x-2">
-                    {user.role === 'SUPERUSER' && (
+                    <div className="flex items-center space-x-2">
+                      {/* Botones de vista */}
                       <Button
-                        onClick={() => setShowAddForm(true)}
-                        className="flex items-center space-x-2"
+                        variant={viewMode === 'grid' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setViewMode('grid')}
                       >
-                        <Plus className="w-4 h-4" />
-                        <span>Agregar Tutorial</span>
+                        <Grid3X3 className="w-4 h-4" />
                       </Button>
-                    )}
-                    <Button
-                      variant={viewMode === 'grid' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setViewMode('grid')}
-                    >
-                      <Grid3X3 className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant={viewMode === 'list' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setViewMode('list')}
-                    >
-                      <List className="w-4 h-4" />
-                    </Button>
+                      <Button
+                        variant={viewMode === 'list' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setViewMode('list')}
+                      >
+                        <List className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Tutoriales Grid/List */}
-              <div className="lg:flex-1 lg:min-h-0">
-                {filteredTutorials.length === 0 ? (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Search className="w-8 h-8 text-gray-400" />
+                {/* Tutoriales Grid/List */}
+                <div className="lg:flex-1 lg:min-h-0">
+                  {filteredTutorials.length === 0 ? (
+                    <div className="text-center py-12">
+                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Search className="w-8 h-8 text-gray-400" />
+                      </div>
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">No se encontraron tutoriales</h3>
+                      <p className="text-gray-600">
+                        {searchTerm ? 'Prueba con otros términos de búsqueda' : 'No hay tutoriales en esta categoría'}
+                      </p>
                     </div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No se encontraron tutoriales</h3>
-                    <p className="text-gray-600">
-                      {searchTerm ? 'Prueba con otros términos de búsqueda' : 'No hay tutoriales en esta categoría'}
-                    </p>
-                  </div>
-                ) : (
-                  <ScrollArea className="h-full lg:h-[calc(100vh-280px)]">
-                    <div className={
-                      viewMode === 'grid' 
-                        ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6' 
-                        : 'space-y-4'
-                    }>
-                    {filteredTutorials.map((tutorial) => {
-                      const categoryInfo = getCategoryInfo(tutorial.category);
-                      return (
-                        <Card 
-                          key={tutorial.id} 
-                          className={`cursor-pointer transition-all hover:shadow-lg ${viewMode === 'list' ? 'flex flex-col sm:flex-row' : ''}`}
-                          onClick={() => openVideo(tutorial)}
-                        >
-                          <CardHeader className={viewMode === 'list' ? 'flex-1' : ''}>
-                            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
-                              <div className="flex-1">
-                                <CardTitle className="text-base lg:text-lg mb-2 line-clamp-2">{tutorial.title}</CardTitle>
-                                <CardDescription className="text-sm text-gray-600 mb-3 line-clamp-3">
-                                  {tutorial.description}
-                                </CardDescription>
-                              </div>
-                              {categoryInfo && (
-                                <Badge className={`${categoryInfo.color} text-white flex-shrink-0`}>
-                                  {categoryInfo.name}
-                                </Badge>
-                              )}
-                            </div>
-                            
-                            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 gap-2 sm:gap-0 text-xs lg:text-sm text-gray-500">
-                              {tutorial.duration && (
-                                <div className="flex items-center">
-                                  <Clock className="w-4 h-4 mr-1" />
-                                  {tutorial.duration}
+                  ) : (
+                    <ScrollArea className="h-full lg:h-[calc(100vh-280px)]">
+                      <div className={
+                        viewMode === 'grid' 
+                          ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6' 
+                          : 'space-y-4'
+                      }>
+                        {filteredTutorials.map((tutorial) => {
+                          const categoryInfo = getCategoryInfo(tutorial.category);
+                          const isDeleting = deletingTutorial === tutorial.id;
+                          
+                          return (
+                            <Card 
+                              key={tutorial.id} 
+                              className={`transition-all hover:shadow-lg ${isDeleting ? 'opacity-50 pointer-events-none' : ''}`}
+                            >
+                              {viewMode === 'grid' ? (
+                                /* Vista Grid Compacta */
+                                <>
+                                  <CardHeader className="pb-3">
+                                    <div className="flex items-start justify-between gap-2 mb-2">
+                                      <CardTitle className="text-sm font-semibold line-clamp-2 flex-1">{tutorial.title}</CardTitle>
+                                      {categoryInfo && (
+                                        <Badge className={`${categoryInfo.color} text-white text-xs flex-shrink-0`}>
+                                          {categoryInfo.name}
+                                        </Badge>
+                                      )}
+                                    </div>
+                                    <CardDescription className="text-xs text-gray-600 line-clamp-2 mb-2">
+                                      {tutorial.description}
+                                    </CardDescription>
+                                    <div className="text-xs text-gray-500">
+                                      <span>Creado: {formatDate(tutorial.createdAt)}</span>
+                                    </div>
+                                  </CardHeader>
+                                  
+                                  <CardContent className="pt-0 pb-4">
+                                    <div className="space-y-2">
+                                      <Button 
+                                        size="sm"
+                                        className="w-full"
+                                        onClick={() => openVideo(tutorial)}
+                                        disabled={isDeleting}
+                                      >
+                                        <Play className="w-3 h-3 mr-1" />
+                                        Ver Tutorial
+                                      </Button>
+                                      
+                                      {/* Botones de edición solo para SUPERUSER */}
+                                      {user.role === 'SUPERUSER' && (
+                                        <div className="grid grid-cols-2 gap-1">
+                                          <Button
+                                            size="sm"
+                                            variant="outline"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleEditTutorial(tutorial);
+                                            }}
+                                            disabled={isDeleting}
+                                            className="text-xs"
+                                          >
+                                            <Edit className="w-3 h-3 mr-1" />
+                                            Editar
+                                          </Button>
+                                          <Button
+                                            size="sm"
+                                            variant="outline"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleDeleteTutorial(tutorial.id);
+                                            }}
+                                            disabled={isDeleting}
+                                            className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
+                                          >
+                                            <Trash2 className="w-3 h-3 mr-1" />
+                                            {isDeleting ? 'Eliminando...' : 'Eliminar'}
+                                          </Button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </CardContent>
+                                </>
+                              ) : (
+                                /* Vista Lista Horizontal */
+                                <div className="flex items-center p-4">
+                                  <div className="flex-1 min-w-0 pr-4">
+                                    <div className="flex items-start justify-between gap-2 mb-1">
+                                      <CardTitle className="text-sm font-semibold truncate flex-1">{tutorial.title}</CardTitle>
+                                      {categoryInfo && (
+                                        <Badge className={`${categoryInfo.color} text-white text-xs flex-shrink-0`}>
+                                          {categoryInfo.name}
+                                        </Badge>
+                                      )}
+                                    </div>
+                                    <CardDescription className="text-xs text-gray-600 line-clamp-1 mb-1">
+                                      {tutorial.description}
+                                    </CardDescription>
+                                    <div className="text-xs text-gray-500">
+                                      <span>Creado: {formatDate(tutorial.createdAt)}</span>
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="flex items-center space-x-2 flex-shrink-0">
+                                    <Button 
+                                      size="sm"
+                                      onClick={() => openVideo(tutorial)}
+                                      disabled={isDeleting}
+                                      className="whitespace-nowrap"
+                                    >
+                                      <Play className="w-3 h-3 mr-1" />
+                                      Ver
+                                    </Button>
+                                    
+                                    {/* Botones de edición solo para SUPERUSER */}
+                                    {user.role === 'SUPERUSER' && (
+                                      <>
+                                        <Button
+                                          size="sm"
+                                          variant="outline"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleEditTutorial(tutorial);
+                                          }}
+                                          disabled={isDeleting}
+                                          className="whitespace-nowrap"
+                                        >
+                                          <Edit className="w-3 h-3" />
+                                        </Button>
+                                        <Button
+                                          size="sm"
+                                          variant="outline"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDeleteTutorial(tutorial.id);
+                                          }}
+                                          disabled={isDeleting}
+                                          className="text-red-600 hover:text-red-700 hover:bg-red-50 whitespace-nowrap"
+                                        >
+                                          <Trash2 className="w-3 h-3" />
+                                        </Button>
+                                      </>
+                                    )}
+                                  </div>
                                 </div>
                               )}
-                              <div className="flex items-center">
-                                <span>Creado: {formatDate(tutorial.createdAt)}</span>
-                              </div>
-                            </div>
-
-                            {tutorial.tags.length > 0 && (
-                              <div className="flex flex-wrap gap-1 mt-3">
-                                {tutorial.tags.map((tag, index) => (
-                                  <Badge key={index} variant="outline" className="text-xs">
-                                    <Tag className="w-3 h-3 mr-1" />
-                                    {tag}
-                                  </Badge>
-                                ))}
-                              </div>
-                            )}
-                          </CardHeader>
-                          
-                          <CardContent className={`pt-0 ${viewMode === 'list' ? 'flex items-center' : ''}`}>
-                            <Button className="w-full">
-                              <Play className="w-4 h-4 mr-2" />
-                              Ver Tutorial
-                            </Button>
-                          </CardContent>
-                        </Card>
-                      );
-                    })}
-                    </div>
-                  </ScrollArea>
-                )}
-              </div>
-            </>
-          ) : (
-            /* Vista de gestión de usuarios */
-            <UserManagement currentUser={user} />
-          )}
+                            </Card>
+                          );
+                        })}
+                      </div>
+                    </ScrollArea>
+                  )}
+                </div>
+              </>
+            ) : (
+              /* Vista de gestión de usuarios */
+              <UserManagement currentUser={user} />
+            )}
           </main>
         </div>
       </div>
 
       {/* Modal para agregar tutorial - solo SUPERUSER */}
       {user.role === 'SUPERUSER' && (
-        <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Agregar Nuevo Tutorial</DialogTitle>
-            </DialogHeader>
-            <AddTutorialForm
-              categories={categories}
-              onSubmit={handleAddTutorial}
-              onCancel={() => setShowAddForm(false)}
-              loading={addingTutorial}
-            />
-          </DialogContent>
-        </Dialog>
+        <>
+          <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Agregar Nuevo Tutorial</DialogTitle>
+              </DialogHeader>
+              <AddTutorialForm
+                categories={categories}
+                onSubmit={handleAddTutorial}
+                onCancel={() => setShowAddForm(false)}
+                loading={addingTutorial}
+              />
+            </DialogContent>
+          </Dialog>
+
+          {/* Modal para editar tutorial */}
+          <Dialog open={showEditForm} onOpenChange={setShowEditForm}>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Editar Tutorial</DialogTitle>
+              </DialogHeader>
+              {selectedTutorial && (
+                <EditTutorialForm
+                  tutorial={selectedTutorial}
+                  categories={categories}
+                  onSubmit={handleUpdateTutorial}
+                  onCancel={() => {
+                    setShowEditForm(false);
+                    setSelectedTutorial(null);
+                  }}
+                  loading={editingTutorial}
+                />
+              )}
+            </DialogContent>
+          </Dialog>
+        </>
       )}
     </div>
   );

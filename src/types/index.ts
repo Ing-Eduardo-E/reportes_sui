@@ -4,11 +4,8 @@ export interface Tutorial {
   description: string;
   category: string;
   oneDriveUrl: string;
-  thumbnailUrl?: string;
-  duration?: string;
   createdAt: string;
   updatedAt: string;
-  tags: string[];
 }
 
 export interface Category {

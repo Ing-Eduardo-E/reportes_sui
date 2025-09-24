@@ -1,6 +1,6 @@
-# Portal de Tutoriales
+# Portal de Tutoriales - 3E Asesorías y Consultorías
 
-Sistema privado de gestión de tutoriales en video almacenados en OneDrive, diseñado para equipos de trabajo internos.
+Una aplicación web moderna para gestionar tutoriales de video almacenados en OneDrive, con sistema completo de autenticación y roles.
 
 ## ✨ Características
 
