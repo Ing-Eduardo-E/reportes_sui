@@ -191,10 +191,29 @@ export default function UserManagement({ currentUser }: UserManagementProps) {
             Administra los usuarios del sistema
           </p>
         </div>
-        <Button onClick={() => setShowAddForm(true)} className="flex items-center space-x-2">
-          <Plus className="w-4 h-4" />
-          <span>Agregar Usuario</span>
-        </Button>
+        <button
+          onClick={() => setShowAddForm(true)}
+          className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          style={{
+            backgroundColor: '#1d4ed8 !important',
+            color: '#ffffff !important',
+            border: '2px solid #1d4ed8 !important',
+            fontWeight: 'bold !important'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#1e40af !important';
+            e.currentTarget.style.borderColor = '#1e40af !important';
+            e.currentTarget.style.color = '#ffffff !important';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '#1d4ed8 !important';
+            e.currentTarget.style.borderColor = '#1d4ed8 !important';
+            e.currentTarget.style.color = '#ffffff !important';
+          }}
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          <span>➕ AGREGAR USUARIO</span>
+        </button>
       </div>
 
       {error && (
@@ -352,25 +371,29 @@ export default function UserManagement({ currentUser }: UserManagementProps) {
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex-1 px-6 py-3 text-white font-semibold rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                className="flex-1 px-6 py-3 font-semibold rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
                 style={{
-                  backgroundColor: submitting ? '#9ca3af' : '#1d4ed8',
-                  border: '1px solid ' + (submitting ? '#9ca3af' : '#1d4ed8')
+                  backgroundColor: submitting ? '#9ca3af !important' : '#1d4ed8 !important',
+                  color: '#ffffff !important',
+                  border: '2px solid ' + (submitting ? '#9ca3af !important' : '#1d4ed8 !important'),
+                  fontWeight: 'bold !important'
                 }}
                 onMouseEnter={(e) => {
                   if (!submitting) {
-                    e.currentTarget.style.backgroundColor = '#1e40af';
-                    e.currentTarget.style.borderColor = '#1e40af';
+                    e.currentTarget.style.backgroundColor = '#1e40af !important';
+                    e.currentTarget.style.borderColor = '#1e40af !important';
+                    e.currentTarget.style.color = '#ffffff !important';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!submitting) {
-                    e.currentTarget.style.backgroundColor = '#1d4ed8';
-                    e.currentTarget.style.borderColor = '#1d4ed8';
+                    e.currentTarget.style.backgroundColor = '#1d4ed8 !important';
+                    e.currentTarget.style.borderColor = '#1d4ed8 !important';
+                    e.currentTarget.style.color = '#ffffff !important';
                   }
                 }}
               >
-                {submitting ? 'Creando Usuario...' : '✅ Crear Usuario'}
+                {submitting ? '⏳ Creando Usuario...' : '✅ CREAR USUARIO'}
               </button>
               <button
                 type="button"
@@ -378,26 +401,27 @@ export default function UserManagement({ currentUser }: UserManagementProps) {
                 disabled={submitting}
                 className="flex-1 px-6 py-3 font-semibold rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
                 style={{
-                  backgroundColor: submitting ? '#f3f4f6' : '#ffffff',
-                  color: submitting ? '#9ca3af' : '#dc2626',
-                  border: '2px solid ' + (submitting ? '#d1d5db' : '#dc2626')
+                  backgroundColor: submitting ? '#f3f4f6 !important' : '#ffffff !important',
+                  color: submitting ? '#9ca3af !important' : '#dc2626 !important',
+                  border: '2px solid ' + (submitting ? '#d1d5db !important' : '#dc2626 !important'),
+                  fontWeight: 'bold !important'
                 }}
                 onMouseEnter={(e) => {
                   if (!submitting) {
-                    e.currentTarget.style.backgroundColor = '#fef2f2';
-                    e.currentTarget.style.color = '#b91c1c';
-                    e.currentTarget.style.borderColor = '#b91c1c';
+                    e.currentTarget.style.backgroundColor = '#fef2f2 !important';
+                    e.currentTarget.style.color = '#b91c1c !important';
+                    e.currentTarget.style.borderColor = '#b91c1c !important';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!submitting) {
-                    e.currentTarget.style.backgroundColor = '#ffffff';
-                    e.currentTarget.style.color = '#dc2626';
-                    e.currentTarget.style.borderColor = '#dc2626';
+                    e.currentTarget.style.backgroundColor = '#ffffff !important';
+                    e.currentTarget.style.color = '#dc2626 !important';
+                    e.currentTarget.style.borderColor = '#dc2626 !important';
                   }
                 }}
               >
-                ❌ Cancelar
+                ❌ CANCELAR
               </button>
             </div>
           </form>
