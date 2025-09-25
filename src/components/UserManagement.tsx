@@ -348,19 +348,57 @@ export default function UserManagement({ currentUser }: UserManagementProps) {
               </select>
             </div>
 
-            <div className="flex space-x-2 pt-4">
-              <Button type="submit" disabled={submitting} className="flex-1">
-                {submitting ? 'Creando...' : 'Crear Usuario'}
-              </Button>
-              <Button
+            <div className="flex space-x-4 pt-6">
+              <button
+                type="submit"
+                disabled={submitting}
+                className="flex-1 px-6 py-3 text-white font-semibold rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                style={{
+                  backgroundColor: submitting ? '#9ca3af' : '#1d4ed8',
+                  border: '1px solid ' + (submitting ? '#9ca3af' : '#1d4ed8')
+                }}
+                onMouseEnter={(e) => {
+                  if (!submitting) {
+                    e.currentTarget.style.backgroundColor = '#1e40af';
+                    e.currentTarget.style.borderColor = '#1e40af';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!submitting) {
+                    e.currentTarget.style.backgroundColor = '#1d4ed8';
+                    e.currentTarget.style.borderColor = '#1d4ed8';
+                  }
+                }}
+              >
+                {submitting ? 'Creando Usuario...' : '✅ Crear Usuario'}
+              </button>
+              <button
                 type="button"
-                variant="outline"
                 onClick={() => setShowAddForm(false)}
                 disabled={submitting}
-                className="flex-1"
+                className="flex-1 px-6 py-3 font-semibold rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
+                style={{
+                  backgroundColor: submitting ? '#f3f4f6' : '#ffffff',
+                  color: submitting ? '#9ca3af' : '#dc2626',
+                  border: '2px solid ' + (submitting ? '#d1d5db' : '#dc2626')
+                }}
+                onMouseEnter={(e) => {
+                  if (!submitting) {
+                    e.currentTarget.style.backgroundColor = '#fef2f2';
+                    e.currentTarget.style.color = '#b91c1c';
+                    e.currentTarget.style.borderColor = '#b91c1c';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!submitting) {
+                    e.currentTarget.style.backgroundColor = '#ffffff';
+                    e.currentTarget.style.color = '#dc2626';
+                    e.currentTarget.style.borderColor = '#dc2626';
+                  }
+                }}
               >
-                Cancelar
-              </Button>
+                ❌ Cancelar
+              </button>
             </div>
           </form>
         </DialogContent>
