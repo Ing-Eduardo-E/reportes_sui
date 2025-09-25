@@ -379,8 +379,7 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                     <div className="space-y-2">
                                       <Button 
                                         size="sm"
-                                        variant="default"
-                                        className="w-full"
+                                        className="w-full btn-ver-tutorial"
                                         onClick={() => openVideo(tutorial)}
                                         disabled={isDeleting}
                                       >
@@ -394,12 +393,12 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                           <Button
                                             size="sm"
                                             variant="outline"
+                                            className="text-xs btn-editar-tutorial"
                                             onClick={(e) => {
                                               e.stopPropagation();
                                               handleEditTutorial(tutorial);
                                             }}
                                             disabled={isDeleting}
-                                            className="text-xs"
                                           >
                                             <Edit className="w-3 h-3 mr-1" />
                                             Editar
@@ -407,12 +406,12 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                           <Button
                                             size="sm"
                                             variant="outline"
+                                            className="text-xs btn-eliminar-tutorial"
                                             onClick={(e) => {
                                               e.stopPropagation();
                                               handleDeleteTutorial(tutorial.id);
                                             }}
                                             disabled={isDeleting}
-                                            className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
                                           >
                                             <Trash2 className="w-3 h-3 mr-1" />
                                             {isDeleting ? 'Eliminando...' : 'Eliminar'}
@@ -445,8 +444,7 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                   <div className="flex items-center space-x-2 flex-shrink-0">
                                     <Button 
                                       size="sm"
-                                      variant="default"
-                                      className="whitespace-nowrap"
+                                      className="whitespace-nowrap btn-ver-tutorial"
                                       onClick={() => openVideo(tutorial)}
                                       disabled={isDeleting}
                                     >
@@ -460,24 +458,24 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                         <Button
                                           size="sm"
                                           variant="outline"
+                                          className="whitespace-nowrap btn-editar-tutorial"
                                           onClick={(e) => {
                                             e.stopPropagation();
                                             handleEditTutorial(tutorial);
                                           }}
                                           disabled={isDeleting}
-                                          className="whitespace-nowrap"
                                         >
                                           <Edit className="w-3 h-3" />
                                         </Button>
                                         <Button
                                           size="sm"
                                           variant="outline"
+                                          className="whitespace-nowrap btn-eliminar-tutorial"
                                           onClick={(e) => {
                                             e.stopPropagation();
                                             handleDeleteTutorial(tutorial.id);
                                           }}
                                           disabled={isDeleting}
-                                          className="text-red-600 hover:text-red-700 hover:bg-red-50 whitespace-nowrap"
                                         >
                                           <Trash2 className="w-3 h-3" />
                                         </Button>
