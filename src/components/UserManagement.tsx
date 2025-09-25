@@ -191,29 +191,42 @@ export default function UserManagement({ currentUser }: UserManagementProps) {
             Administra los usuarios del sistema
           </p>
         </div>
-        <button
+        <div
           onClick={() => setShowAddForm(true)}
-          className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           style={{
-            backgroundColor: '#1d4ed8 !important',
-            color: '#ffffff !important',
-            border: '2px solid #1d4ed8 !important',
-            fontWeight: 'bold !important'
+            backgroundColor: '#1d4ed8',
+            color: '#ffffff',
+            padding: '12px 20px',
+            borderRadius: '8px',
+            border: '2px solid #1d4ed8',
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontWeight: 'bold',
+            fontSize: '14px',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            transition: 'all 0.2s ease-in-out',
+            textDecoration: 'none',
+            userSelect: 'none'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#1e40af !important';
-            e.currentTarget.style.borderColor = '#1e40af !important';
-            e.currentTarget.style.color = '#ffffff !important';
+            e.currentTarget.style.backgroundColor = '#1e40af';
+            e.currentTarget.style.transform = 'translateY(-1px)';
+            e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.2)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#1d4ed8 !important';
-            e.currentTarget.style.borderColor = '#1d4ed8 !important';
-            e.currentTarget.style.color = '#ffffff !important';
+            e.currentTarget.style.backgroundColor = '#1d4ed8';
+            e.currentTarget.style.transform = 'translateY(0px)';
+            e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+          }}
+          onMouseDown={(e) => {
+            e.currentTarget.style.transform = 'translateY(0px)';
           }}
         >
-          <Plus className="w-4 h-4 mr-2" />
-          <span>➕ AGREGAR USUARIO</span>
-        </button>
+          <Plus style={{ width: '16px', height: '16px', color: '#ffffff' }} />
+          <span style={{ color: '#ffffff', fontWeight: 'bold' }}>AGREGAR USUARIO</span>
+        </div>
       </div>
 
       {error && (
@@ -368,61 +381,84 @@ export default function UserManagement({ currentUser }: UserManagementProps) {
             </div>
 
             <div className="flex space-x-4 pt-6">
-              <button
-                type="submit"
-                disabled={submitting}
-                className="flex-1 px-6 py-3 font-semibold rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              <div
+                onClick={!submitting ? (e) => { 
+                  e.preventDefault(); 
+                  const form = e.currentTarget.closest('form');
+                  if (form) {
+                    const formEvent = new Event('submit', { bubbles: true, cancelable: true });
+                    form.dispatchEvent(formEvent);
+                  }
+                } : undefined}
                 style={{
-                  backgroundColor: submitting ? '#9ca3af !important' : '#1d4ed8 !important',
-                  color: '#ffffff !important',
-                  border: '2px solid ' + (submitting ? '#9ca3af !important' : '#1d4ed8 !important'),
-                  fontWeight: 'bold !important'
+                  backgroundColor: submitting ? '#9ca3af' : '#1d4ed8',
+                  color: '#ffffff',
+                  padding: '14px 24px',
+                  borderRadius: '8px',
+                  border: '2px solid ' + (submitting ? '#9ca3af' : '#1d4ed8'),
+                  cursor: submitting ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 'bold',
+                  fontSize: '14px',
+                  flex: '1',
+                  textAlign: 'center',
+                  opacity: submitting ? 0.7 : 1,
+                  transition: 'all 0.2s ease-in-out',
+                  userSelect: 'none'
                 }}
                 onMouseEnter={(e) => {
                   if (!submitting) {
-                    e.currentTarget.style.backgroundColor = '#1e40af !important';
-                    e.currentTarget.style.borderColor = '#1e40af !important';
-                    e.currentTarget.style.color = '#ffffff !important';
+                    e.currentTarget.style.backgroundColor = '#1e40af';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!submitting) {
-                    e.currentTarget.style.backgroundColor = '#1d4ed8 !important';
-                    e.currentTarget.style.borderColor = '#1d4ed8 !important';
-                    e.currentTarget.style.color = '#ffffff !important';
+                    e.currentTarget.style.backgroundColor = '#1d4ed8';
+                    e.currentTarget.style.transform = 'translateY(0px)';
                   }
                 }}
               >
-                {submitting ? '⏳ Creando Usuario...' : '✅ CREAR USUARIO'}
-              </button>
-              <button
-                type="button"
+                <span style={{ color: '#ffffff', fontWeight: 'bold' }}>
+                  {submitting ? '⏳ CREANDO USUARIO...' : '✅ CREAR USUARIO'}
+                </span>
+              </div>
+              <div
                 onClick={() => setShowAddForm(false)}
-                disabled={submitting}
-                className="flex-1 px-6 py-3 font-semibold rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
                 style={{
-                  backgroundColor: submitting ? '#f3f4f6 !important' : '#ffffff !important',
-                  color: submitting ? '#9ca3af !important' : '#dc2626 !important',
-                  border: '2px solid ' + (submitting ? '#d1d5db !important' : '#dc2626 !important'),
-                  fontWeight: 'bold !important'
+                  backgroundColor: '#ffffff',
+                  color: '#dc2626',
+                  padding: '14px 24px',
+                  borderRadius: '8px',
+                  border: '2px solid #dc2626',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 'bold',
+                  fontSize: '14px',
+                  flex: '1',
+                  textAlign: 'center',
+                  transition: 'all 0.2s ease-in-out',
+                  userSelect: 'none'
                 }}
                 onMouseEnter={(e) => {
-                  if (!submitting) {
-                    e.currentTarget.style.backgroundColor = '#fef2f2 !important';
-                    e.currentTarget.style.color = '#b91c1c !important';
-                    e.currentTarget.style.borderColor = '#b91c1c !important';
-                  }
+                  e.currentTarget.style.backgroundColor = '#fef2f2';
+                  e.currentTarget.style.color = '#b91c1c';
+                  e.currentTarget.style.borderColor = '#b91c1c';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
                 }}
                 onMouseLeave={(e) => {
-                  if (!submitting) {
-                    e.currentTarget.style.backgroundColor = '#ffffff !important';
-                    e.currentTarget.style.color = '#dc2626 !important';
-                    e.currentTarget.style.borderColor = '#dc2626 !important';
-                  }
+                  e.currentTarget.style.backgroundColor = '#ffffff';
+                  e.currentTarget.style.color = '#dc2626';
+                  e.currentTarget.style.borderColor = '#dc2626';
+                  e.currentTarget.style.transform = 'translateY(0px)';
                 }}
               >
-                ❌ CANCELAR
-              </button>
+                <span style={{ color: 'inherit', fontWeight: 'bold' }}>❌ CANCELAR</span>
+              </div>
             </div>
           </form>
         </DialogContent>
