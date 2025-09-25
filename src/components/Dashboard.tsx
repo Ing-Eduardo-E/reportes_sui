@@ -380,7 +380,7 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                       <Button 
                                         size="sm"
                                         variant="default"
-                                        className="w-full text-white bg-blue-600 hover:bg-blue-700 font-semibold shadow-md"
+                                        className="w-full"
                                         onClick={() => openVideo(tutorial)}
                                         disabled={isDeleting}
                                       >
@@ -446,7 +446,7 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                     <Button 
                                       size="sm"
                                       variant="default"
-                                      className="whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 font-semibold shadow-md"
+                                      className="whitespace-nowrap"
                                       onClick={() => openVideo(tutorial)}
                                       disabled={isDeleting}
                                     >
