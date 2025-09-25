@@ -379,7 +379,8 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                     <div className="space-y-2">
                                       <Button 
                                         size="sm"
-                                        className="w-full"
+                                        variant="default"
+                                        className="w-full text-white bg-blue-600 hover:bg-blue-700 font-semibold shadow-md"
                                         onClick={() => openVideo(tutorial)}
                                         disabled={isDeleting}
                                       >
@@ -444,9 +445,10 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                   <div className="flex items-center space-x-2 flex-shrink-0">
                                     <Button 
                                       size="sm"
+                                      variant="default"
+                                      className="whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 font-semibold shadow-md"
                                       onClick={() => openVideo(tutorial)}
                                       disabled={isDeleting}
-                                      className="whitespace-nowrap"
                                     >
                                       <Play className="w-3 h-3 mr-1" />
                                       Ver
