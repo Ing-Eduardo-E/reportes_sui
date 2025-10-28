@@ -23,7 +23,9 @@ import {
   Plus,
   Users,
   Edit,
-  Trash2
+  Trash2,
+  Menu,
+  X
 } from 'lucide-react';
 import { Tutorial, User } from '@/types';
 import { useTutorials } from '@/hooks/use-tutorials';
@@ -31,6 +33,8 @@ import AddTutorialForm from './AddTutorialForm';
 import EditTutorialForm from './EditTutorialForm';
 import UserManagement from './UserManagement';
 import Logo from './Logo';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface DashboardProps {
   user: User;
@@ -58,6 +62,8 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
   const [editingTutorial, setEditingTutorial] = useState(false);
   const [deletingTutorial, setDeletingTutorial] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<'tutorials' | 'users'>('tutorials');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   // Filtrar tutoriales
   const filteredTutorials = tutorials.filter(tutorial => {
@@ -140,23 +146,130 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
   }
 
   return (
-    <div className="h-full lg:h-screen bg-gray-50 lg:flex lg:flex-col">
-      {/* Header - sticky en desktop */}
-      <header className="bg-white border-b border-gray-200 px-4 lg:px-6 py-4 lg:sticky lg:top-0 lg:z-20">
+    <div className="h-full min-h-screen lg:h-screen bg-gray-50 lg:flex lg:flex-col">
+      {/* Header - sticky en todas las pantallas */}
+      <header className="bg-white border-b border-gray-200 px-4 lg:px-6 py-3 lg:py-4 sticky top-0 z-20">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3 lg:space-x-4">
-            <Logo size="md" showText={false} className="flex-shrink-0" />
-            <div className="min-w-0">
-              <h1 className="text-lg lg:text-xl font-semibold text-gray-900 truncate">Portal de Tutoriales</h1>
-              <p className="text-xs lg:text-sm text-gray-500 truncate">Bienvenido, {user.username}</p>
+          {/* Botón menú hamburguesa en móvil */}
+          {isMobile && (
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <button className="p-2 -ml-2 hover:bg-gray-100 rounded-md transition-colors">
+                  <Menu className="w-6 h-6 text-gray-700" />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[280px] sm:w-[350px] p-0">
+                <SheetHeader className="p-4 border-b">
+                  <SheetTitle className="flex items-center gap-2">
+                    <Logo size="sm" showText={false} />
+                    Navegación
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="p-4 space-y-4 overflow-y-auto">
+                  {/* Navegación principal */}
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-medium text-gray-900">Navegación</h3>
+                    <div className="space-y-1">
+                      <Button
+                        variant={currentView === 'tutorials' ? 'default' : 'ghost'}
+                        size="sm"
+                        onClick={() => {
+                          setCurrentView('tutorials');
+                          setMobileMenuOpen(false);
+                        }}
+                        className="w-full justify-start"
+                      >
+                        <Play className="w-4 h-4 mr-2" />
+                        Tutoriales
+                      </Button>
+                      {user.role === 'SUPERUSER' && (
+                        <Button
+                          variant={currentView === 'users' ? 'default' : 'ghost'}
+                          size="sm"
+                          onClick={() => {
+                            setCurrentView('users');
+                            setMobileMenuOpen(false);
+                          }}
+                          className="w-full justify-start"
+                        >
+                          <Users className="w-4 h-4 mr-2" />
+                          Usuarios
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Búsqueda y filtros - solo en vista tutoriales */}
+                  {currentView === 'tutorials' && (
+                    <>
+                      <div className="relative">
+                        <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                        <Input
+                          placeholder="Buscar tutoriales..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="pl-10"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <h3 className="text-sm font-medium text-gray-900 flex items-center">
+                          <Filter className="w-4 h-4 mr-2" />
+                          Categorías
+                        </h3>
+                        <div className="space-y-1">
+                          <Button
+                            variant={selectedCategory === 'all' ? 'default' : 'ghost'}
+                            size="sm"
+                            onClick={() => {
+                              setSelectedCategory('all');
+                              setMobileMenuOpen(false);
+                            }}
+                            className="w-full justify-start"
+                          >
+                            Todas ({tutorials.length})
+                          </Button>
+                          {categories.map((category) => {
+                            const Icon = iconMap[category.icon as keyof typeof iconMap] || Settings;
+                            const count = tutorials.filter(t => t.category === category.id).length;
+                            return (
+                              <Button
+                                key={category.id}
+                                variant={selectedCategory === category.id ? 'default' : 'ghost'}
+                                size="sm"
+                                onClick={() => {
+                                  setSelectedCategory(category.id);
+                                  setMobileMenuOpen(false);
+                                }}
+                                className="w-full justify-start"
+                              >
+                                <Icon className="w-4 h-4 mr-2" />
+                                {category.name} ({count})
+                              </Button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
+          )}
+
+          <div className="flex items-center space-x-2 lg:space-x-4 flex-1 min-w-0">
+            {!isMobile && <Logo size="md" showText={false} className="flex-shrink-0" />}
+            <div className="min-w-0 flex-1">
+              <h1 className="text-base lg:text-xl font-semibold text-gray-900 truncate">Portal de Tutoriales</h1>
+              <p className="text-xs lg:text-sm text-gray-500 truncate hidden sm:block">Bienvenido, {user.username}</p>
             </div>
           </div>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 flex-shrink-0">
             {/* Botón Agregar Tutorial - Solo SUPERUSER */}
             {user.role === 'SUPERUSER' && (
               <button
                 onClick={() => setShowAddForm(true)}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white rounded-md shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-flex items-center px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium text-white rounded-md shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 style={{
                   backgroundColor: '#1d4ed8',
                   border: '1px solid #1d4ed8'
@@ -170,19 +283,18 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                   e.currentTarget.style.borderColor = '#1d4ed8';
                 }}
               >
-                <Plus className="w-4 h-4 mr-2" />
-                <span className="hidden sm:inline">Agregar Tutorial</span>
-                <span className="sm:hidden">Agregar</span>
+                <Plus className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Agregar</span>
               </button>
             )}
             {/* Botón Cerrar Sesión */}
             <button
               onClick={onLogout}
-              className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              className="inline-flex items-center px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
               style={{
                 backgroundColor: '#ffffff',
                 color: '#1f2937',
-                border: '3px solid #ef4444',
+                border: '2px solid #ef4444',
                 fontWeight: 'bold'
               }}
               onMouseEnter={(e) => {
@@ -196,9 +308,8 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                 e.currentTarget.style.color = '#1f2937';
               }}
             >
-              <LogOut className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">🚪 Cerrar Sesión</span>
-              <span className="sm:hidden">🚪 Salir</span>
+              <LogOut className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Salir</span>
             </button>
           </div>
         </div>
@@ -207,123 +318,127 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
       {/* Main content area with proper height */}
       <div className="flex-1 lg:flex lg:min-h-0">
         <div className="flex flex-col lg:flex-row lg:w-full lg:h-full">
-          {/* Sidebar */}
-          <aside className="lg:w-64 w-full bg-white border-r border-gray-200 lg:overflow-y-auto">
-            <div className="p-4 lg:p-6">
-              <div className="space-y-4">
-                {/* Navegación principal */}
-                <div className="space-y-2">
-                  <h3 className="text-sm font-medium text-gray-900">Navegación</h3>
-                  <div className="space-y-1 flex flex-row lg:flex-col gap-2 lg:gap-0">
-                    <Button
-                      variant={currentView === 'tutorials' ? 'default' : 'ghost'}
-                      size="sm"
-                      onClick={() => setCurrentView('tutorials')}
-                      className="flex-1 lg:w-full justify-start"
-                    >
-                      <Play className="w-4 h-4 mr-2" />
-                      Tutoriales
-                    </Button>
-                    {user.role === 'SUPERUSER' && (
+          {/* Sidebar - solo visible en desktop */}
+          {!isMobile && (
+            <aside className="w-64 bg-white border-r border-gray-200 overflow-y-auto">
+              <div className="p-6">
+                <div className="space-y-4">
+                  {/* Navegación principal */}
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-medium text-gray-900">Navegación</h3>
+                    <div className="space-y-1">
                       <Button
-                        variant={currentView === 'users' ? 'default' : 'ghost'}
+                        variant={currentView === 'tutorials' ? 'default' : 'ghost'}
                         size="sm"
-                        onClick={() => setCurrentView('users')}
-                        className="flex-1 lg:w-full justify-start"
+                        onClick={() => setCurrentView('tutorials')}
+                        className="w-full justify-start"
                       >
-                        <Users className="w-4 h-4 mr-2" />
-                        Usuarios
+                        <Play className="w-4 h-4 mr-2" />
+                        Tutoriales
                       </Button>
-                    )}
-                  </div>
-                </div>
-
-                {/* Búsqueda y filtros - solo mostrar en vista de tutoriales */}
-                {currentView === 'tutorials' && (
-                  <>
-                    {/* Búsqueda */}
-                    <div className="relative">
-                      <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-                      <Input
-                        placeholder="Buscar tutoriales..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-
-                    {/* Filtros de categoría */}
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-medium text-gray-900 flex items-center">
-                        <Filter className="w-4 h-4 mr-2" />
-                        Categorías
-                      </h3>
-                      <div className="space-y-1">
+                      {user.role === 'SUPERUSER' && (
                         <Button
-                          variant={selectedCategory === 'all' ? 'default' : 'ghost'}
+                          variant={currentView === 'users' ? 'default' : 'ghost'}
                           size="sm"
-                          onClick={() => setSelectedCategory('all')}
+                          onClick={() => setCurrentView('users')}
                           className="w-full justify-start"
                         >
-                          Todas ({tutorials.length})
+                          <Users className="w-4 h-4 mr-2" />
+                          Usuarios
                         </Button>
-                        {categories.map((category) => {
-                          const Icon = iconMap[category.icon as keyof typeof iconMap] || Settings;
-                          const count = tutorials.filter(t => t.category === category.id).length;
-                          return (
-                            <Button
-                              key={category.id}
-                              variant={selectedCategory === category.id ? 'default' : 'ghost'}
-                              size="sm"
-                              onClick={() => setSelectedCategory(category.id)}
-                              className="w-full justify-start"
-                            >
-                              <Icon className="w-4 h-4 mr-2" />
-                              {category.name} ({count})
-                            </Button>
-                          );
-                        })}
-                      </div>
+                      )}
                     </div>
-                  </>
-                )}
+                  </div>
+
+                  {/* Búsqueda y filtros - solo mostrar en vista de tutoriales */}
+                  {currentView === 'tutorials' && (
+                    <>
+                      {/* Búsqueda */}
+                      <div className="relative">
+                        <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                        <Input
+                          placeholder="Buscar tutoriales..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="pl-10"
+                        />
+                      </div>
+
+                      {/* Filtros de categoría */}
+                      <div className="space-y-2">
+                        <h3 className="text-sm font-medium text-gray-900 flex items-center">
+                          <Filter className="w-4 h-4 mr-2" />
+                          Categorías
+                        </h3>
+                        <div className="space-y-1">
+                          <Button
+                            variant={selectedCategory === 'all' ? 'default' : 'ghost'}
+                            size="sm"
+                            onClick={() => setSelectedCategory('all')}
+                            className="w-full justify-start"
+                          >
+                            Todas ({tutorials.length})
+                          </Button>
+                          {categories.map((category) => {
+                            const Icon = iconMap[category.icon as keyof typeof iconMap] || Settings;
+                            const count = tutorials.filter(t => t.category === category.id).length;
+                            return (
+                              <Button
+                                key={category.id}
+                                variant={selectedCategory === category.id ? 'default' : 'ghost'}
+                                size="sm"
+                                onClick={() => setSelectedCategory(category.id)}
+                                className="w-full justify-start"
+                              >
+                                <Icon className="w-4 h-4 mr-2" />
+                                {category.name} ({count})
+                              </Button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          </aside>
+            </aside>
+          )}
 
           {/* Main Content */}
-          <main className="flex-1 p-4 lg:p-6 lg:overflow-y-auto lg:h-full">
+          <main className="flex-1 p-3 sm:p-4 lg:p-6 lg:overflow-y-auto lg:h-full">
             {currentView === 'tutorials' ? (
               <>
-                <div className="mb-6">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="mb-4 lg:mb-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                     <div>
-                      <h2 className="text-xl lg:text-2xl font-bold text-gray-900">
+                      <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">
                         {selectedCategory === 'all' ? 'Todos los Tutoriales' : 
                          categories.find(c => c.id === selectedCategory)?.name || 'Tutoriales'}
                       </h2>
-                      <p className="text-gray-600 mt-1 text-sm lg:text-base">
+                      <p className="text-gray-600 mt-1 text-xs sm:text-sm lg:text-base">
                         {filteredTutorials.length} tutorial{filteredTutorials.length !== 1 ? 'es' : ''} 
                         {searchTerm && ` encontrado${filteredTutorials.length !== 1 ? 's' : ''} para "${searchTerm}"`}
                       </p>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      {/* Botones de vista */}
-                      <Button
-                        variant={viewMode === 'grid' ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setViewMode('grid')}
-                      >
-                        <Grid3X3 className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant={viewMode === 'list' ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setViewMode('list')}
-                      >
-                        <List className="w-4 h-4" />
-                      </Button>
-                    </div>
+                    {/* Botones de vista - ocultos en móvil, siempre grid */}
+                    {!isMobile && (
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant={viewMode === 'grid' ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => setViewMode('grid')}
+                        >
+                          <Grid3X3 className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant={viewMode === 'list' ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => setViewMode('list')}
+                        >
+                          <List className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -342,8 +457,8 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                   ) : (
                     <ScrollArea className="h-full lg:h-[calc(100vh-280px)]">
                       <div className={
-                        viewMode === 'grid' 
-                          ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6' 
+                        isMobile || viewMode === 'grid'
+                          ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6' 
                           : 'space-y-4'
                       }>
                         {filteredTutorials.map((tutorial) => {
@@ -355,19 +470,19 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                               key={tutorial.id} 
                               className={`transition-all hover:shadow-lg ${isDeleting ? 'opacity-50 pointer-events-none' : ''}`}
                             >
-                              {viewMode === 'grid' ? (
-                                /* Vista Grid Compacta */
+                              {isMobile || viewMode === 'grid' ? (
+                                /* Vista Grid - Optimizada para móvil */
                                 <>
-                                  <CardHeader className="pb-3">
+                                  <CardHeader className="pb-3 p-3 sm:p-4">
                                     <div className="flex items-start justify-between gap-2 mb-2">
-                                      <CardTitle className="text-sm font-semibold line-clamp-2 flex-1">{tutorial.title}</CardTitle>
+                                      <CardTitle className="text-sm sm:text-base font-semibold line-clamp-2 flex-1">{tutorial.title}</CardTitle>
                                       {categoryInfo && (
                                         <Badge className={`${categoryInfo.color} text-white text-xs flex-shrink-0`}>
                                           {categoryInfo.name}
                                         </Badge>
                                       )}
                                     </div>
-                                    <CardDescription className="text-xs text-gray-600 line-clamp-2 mb-2">
+                                    <CardDescription className="text-xs sm:text-sm text-gray-600 line-clamp-2 mb-2">
                                       {tutorial.description}
                                     </CardDescription>
                                     <div className="text-xs text-gray-500">
@@ -375,45 +490,45 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                     </div>
                                   </CardHeader>
                                   
-                                  <CardContent className="pt-0 pb-4">
+                                  <CardContent className="pt-0 pb-3 sm:pb-4 p-3 sm:p-4">
                                     <div className="space-y-2">
                                       <Button 
-                                        size="sm"
-                                        className="w-full btn-ver-tutorial"
+                                        size={isMobile ? "default" : "sm"}
+                                        className="w-full btn-ver-tutorial text-sm sm:text-base font-semibold"
                                         onClick={() => openVideo(tutorial)}
                                         disabled={isDeleting}
                                       >
-                                        <Play className="w-3 h-3 mr-1" />
+                                        <Play className="w-4 h-4 mr-2" />
                                         Ver Tutorial
                                       </Button>
                                       
                                       {/* Botones de edición solo para SUPERUSER */}
                                       {user.role === 'SUPERUSER' && (
-                                        <div className="grid grid-cols-2 gap-1">
+                                        <div className="grid grid-cols-2 gap-2">
                                           <Button
-                                            size="sm"
+                                            size={isMobile ? "default" : "sm"}
                                             variant="outline"
-                                            className="text-xs btn-editar-tutorial"
+                                            className="text-xs sm:text-sm btn-editar-tutorial"
                                             onClick={(e) => {
                                               e.stopPropagation();
                                               handleEditTutorial(tutorial);
                                             }}
                                             disabled={isDeleting}
                                           >
-                                            <Edit className="w-3 h-3 mr-1" />
+                                            <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                                             Editar
                                           </Button>
                                           <Button
-                                            size="sm"
+                                            size={isMobile ? "default" : "sm"}
                                             variant="outline"
-                                            className="text-xs btn-eliminar-tutorial"
+                                            className="text-xs sm:text-sm btn-eliminar-tutorial"
                                             onClick={(e) => {
                                               e.stopPropagation();
                                               handleDeleteTutorial(tutorial.id);
                                             }}
                                             disabled={isDeleting}
                                           >
-                                            <Trash2 className="w-3 h-3 mr-1" />
+                                            <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                                             {isDeleting ? 'Eliminando...' : 'Eliminar'}
                                           </Button>
                                         </div>
@@ -504,9 +619,9 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
       {user.role === 'SUPERUSER' && (
         <>
           <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[90vh] overflow-y-auto p-3 sm:p-6">
               <DialogHeader>
-                <DialogTitle>Agregar Nuevo Tutorial</DialogTitle>
+                <DialogTitle className="text-lg sm:text-xl">Agregar Nuevo Tutorial</DialogTitle>
               </DialogHeader>
               <AddTutorialForm
                 categories={categories}
@@ -519,9 +634,9 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
 
           {/* Modal para editar tutorial */}
           <Dialog open={showEditForm} onOpenChange={setShowEditForm}>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[90vh] overflow-y-auto p-3 sm:p-6">
               <DialogHeader>
-                <DialogTitle>Editar Tutorial</DialogTitle>
+                <DialogTitle className="text-lg sm:text-xl">Editar Tutorial</DialogTitle>
               </DialogHeader>
               {selectedTutorial && (
                 <EditTutorialForm
