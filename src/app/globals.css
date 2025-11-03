@@ -242,7 +242,7 @@ html {
   }
   
   /* Fix para botón de login - asegurar que sea visible */
-  button[type="submit"] {
+  button[type="submit"]:not(.login-button) {
     background-color: hsl(221.2 83.2% 53.3%) !important;
     color: hsl(210 40% 98%) !important;
     font-weight: 500 !important;
@@ -251,11 +251,11 @@ html {
     transition: all 0.2s ease !important;
   }
   
-  button[type="submit"]:hover:not(:disabled) {
+  button[type="submit"]:not(.login-button):hover:not(:disabled) {
     background-color: hsl(221.2 83.2% 45%) !important;
   }
   
-  button[type="submit"]:disabled {
+  button[type="submit"]:not(.login-button):disabled {
     opacity: 0.5 !important;
     cursor: not-allowed !important;
   }

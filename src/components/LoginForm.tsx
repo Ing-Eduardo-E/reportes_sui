@@ -45,9 +45,9 @@ export default function LoginForm({ onLogin, loading = false }: LoginFormProps) 
   };
 
   return (
-    <div className="min-h-screen lg:min-h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
+    <div className="w-full h-full min-h-[600px] flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4 py-8">
+      <Card className="w-full max-w-md shadow-xl">
+        <CardHeader className="text-center pb-4">
           <div className="mx-auto mb-4">
             <Logo size="xl" showText={false} />
           </div>
@@ -56,7 +56,7 @@ export default function LoginForm({ onLogin, loading = false }: LoginFormProps) 
             Ingresa tus credenciales para acceder al sistema
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-6 pb-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
               <Alert variant="destructive">
@@ -112,7 +112,7 @@ export default function LoginForm({ onLogin, loading = false }: LoginFormProps) 
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full login-button"
               disabled={isLoading || loading}
             >
               {isLoading || loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
