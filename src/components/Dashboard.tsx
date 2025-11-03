@@ -177,16 +177,16 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                           setCurrentView('tutorials');
                           setMobileMenuOpen(false);
                         }}
-                        className="w-full justify-start h-10 text-sm font-medium"
+                        className="w-full justify-start h-10 text-sm font-semibold"
                         style={{
                           display: 'flex',
                           visibility: 'visible',
-                          color: currentView === 'tutorials' ? '#ffffff' : '#1f2937',
+                          color: currentView === 'tutorials' ? '#000000 !important' : '#000000',
                           fontWeight: '600'
                         }}
                       >
-                        <Play className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: 'inherit' }} />
-                        <span style={{ color: 'inherit' }}>Tutoriales</span>
+                        <Play className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: '#000000' }} />
+                        <span style={{ color: '#000000 !important' }}>Tutoriales</span>
                       </Button>
                       {user.role === 'SUPERUSER' && (
                         <Button
@@ -196,16 +196,16 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                             setCurrentView('users');
                             setMobileMenuOpen(false);
                           }}
-                          className="w-full justify-start h-10 text-sm font-medium"
+                          className="w-full justify-start h-10 text-sm font-semibold"
                           style={{
                             display: 'flex',
                             visibility: 'visible',
-                            color: currentView === 'users' ? '#ffffff' : '#1f2937',
+                            color: currentView === 'users' ? '#000000 !important' : '#000000',
                             fontWeight: '600'
                           }}
                         >
-                          <Users className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: 'inherit' }} />
-                          <span style={{ color: 'inherit' }}>Usuarios</span>
+                          <Users className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: '#000000' }} />
+                          <span style={{ color: '#000000 !important' }}>Usuarios</span>
                         </Button>
                       )}
                     </div>
@@ -239,11 +239,11 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                             }}
                             className="w-full justify-start h-10"
                             style={{
-                              color: selectedCategory === 'all' ? '#ffffff' : '#1f2937',
+                              color: '#000000 !important',
                               fontWeight: '500'
                             }}
                           >
-                            <span className="flex-1 text-left" style={{ color: 'inherit' }}>Todas ({tutorials.length})</span>
+                            <span className="flex-1 text-left" style={{ color: '#000000 !important' }}>Todas ({tutorials.length})</span>
                           </Button>
                           {categories.map((category) => {
                             const Icon = iconMap[category.icon as keyof typeof iconMap] || Settings;
@@ -259,12 +259,12 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                 }}
                                 className="w-full justify-start h-10"
                                 style={{
-                                  color: selectedCategory === category.id ? '#ffffff' : '#1f2937',
+                                  color: '#000000 !important',
                                   fontWeight: '500'
                                 }}
                               >
-                                <Icon className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: 'inherit' }} />
-                                <span className="flex-1 text-left truncate" style={{ color: 'inherit' }}>{category.name} ({count})</span>
+                                <Icon className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: '#000000' }} />
+                                <span className="flex-1 text-left truncate" style={{ color: '#000000 !important' }}>{category.name} ({count})</span>
                               </Button>
                             );
                           })}
@@ -351,32 +351,32 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                         variant={currentView === 'tutorials' ? 'default' : 'ghost'}
                         size="sm"
                         onClick={() => setCurrentView('tutorials')}
-                        className="w-full justify-start h-10 text-sm font-medium"
+                        className="w-full justify-start h-10 text-sm font-semibold"
                         style={{
                           display: 'flex',
                           visibility: 'visible',
-                          color: currentView === 'tutorials' ? '#ffffff' : '#1f2937',
+                          color: currentView === 'tutorials' ? '#000000 !important' : '#000000',
                           fontWeight: '600'
                         }}
                       >
-                        <Play className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: 'inherit' }} />
-                        <span style={{ color: 'inherit' }}>Tutoriales</span>
+                        <Play className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: '#000000' }} />
+                        <span style={{ color: '#000000 !important' }}>Tutoriales</span>
                       </Button>
                       {user.role === 'SUPERUSER' && (
                         <Button
                           variant={currentView === 'users' ? 'default' : 'ghost'}
                           size="sm"
                           onClick={() => setCurrentView('users')}
-                          className="w-full justify-start h-10 text-sm font-medium"
+                          className="w-full justify-start h-10 text-sm font-semibold"
                           style={{
                             display: 'flex',
                             visibility: 'visible',
-                            color: currentView === 'users' ? '#ffffff' : '#1f2937',
+                            color: currentView === 'users' ? '#000000 !important' : '#000000',
                             fontWeight: '600'
                           }}
                         >
-                          <Users className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: 'inherit' }} />
-                          <span style={{ color: 'inherit' }}>Usuarios</span>
+                          <Users className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: '#000000' }} />
+                          <span style={{ color: '#000000 !important' }}>Usuarios</span>
                         </Button>
                       )}
                     </div>
@@ -409,11 +409,11 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                             onClick={() => setSelectedCategory('all')}
                             className="w-full justify-start h-10"
                             style={{
-                              color: selectedCategory === 'all' ? '#ffffff' : '#1f2937',
+                              color: '#000000 !important',
                               fontWeight: '500'
                             }}
                           >
-                            <span className="flex-1 text-left" style={{ color: 'inherit' }}>Todas ({tutorials.length})</span>
+                            <span className="flex-1 text-left" style={{ color: '#000000 !important' }}>Todas ({tutorials.length})</span>
                           </Button>
                           {categories.map((category) => {
                             const Icon = iconMap[category.icon as keyof typeof iconMap] || Settings;
@@ -426,12 +426,12 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                 onClick={() => setSelectedCategory(category.id)}
                                 className="w-full justify-start h-10"
                                 style={{
-                                  color: selectedCategory === category.id ? '#ffffff' : '#1f2937',
+                                  color: '#000000 !important',
                                   fontWeight: '500'
                                 }}
                               >
-                                <Icon className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: 'inherit' }} />
-                                <span className="flex-1 text-left truncate" style={{ color: 'inherit' }}>{category.name} ({count})</span>
+                                <Icon className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: '#000000' }} />
+                                <span className="flex-1 text-left truncate" style={{ color: '#000000 !important' }}>{category.name} ({count})</span>
                               </Button>
                             );
                           })}
