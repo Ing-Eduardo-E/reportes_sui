@@ -288,6 +288,21 @@ html {
     box-shadow: none !important;
   }
   
+  /* Estilos específicos para botones de navegación del sidebar */
+  button.sidebar-nav-button,
+  button.sidebar-nav-button span,
+  button.sidebar-nav-button svg {
+    color: #000000 !important;
+    fill: currentColor !important;
+  }
+  
+  button.sidebar-category-button,
+  button.sidebar-category-button span,
+  button.sidebar-category-button svg {
+    color: #000000 !important;
+    fill: currentColor !important;
+  }
+  
   /* Mejoras para botones táctiles en móviles */
   @media (max-width: 768px) {
     button, a[role="button"], [role="button"] {

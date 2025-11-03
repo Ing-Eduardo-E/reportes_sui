@@ -177,16 +177,10 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                           setCurrentView('tutorials');
                           setMobileMenuOpen(false);
                         }}
-                        className="w-full justify-start h-10 text-sm font-semibold"
-                        style={{
-                          display: 'flex',
-                          visibility: 'visible',
-                          color: currentView === 'tutorials' ? '#000000 !important' : '#000000',
-                          fontWeight: '600'
-                        }}
+                        className="sidebar-nav-button w-full justify-start h-10 text-sm font-semibold"
                       >
-                        <Play className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: '#000000' }} />
-                        <span style={{ color: '#000000 !important' }}>Tutoriales</span>
+                        <Play className="w-4 h-4 mr-2 flex-shrink-0" />
+                        <span>Tutoriales</span>
                       </Button>
                       {user.role === 'SUPERUSER' && (
                         <Button
@@ -196,16 +190,10 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                             setCurrentView('users');
                             setMobileMenuOpen(false);
                           }}
-                          className="w-full justify-start h-10 text-sm font-semibold"
-                          style={{
-                            display: 'flex',
-                            visibility: 'visible',
-                            color: currentView === 'users' ? '#000000 !important' : '#000000',
-                            fontWeight: '600'
-                          }}
+                          className="sidebar-nav-button w-full justify-start h-10 text-sm font-semibold"
                         >
-                          <Users className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: '#000000' }} />
-                          <span style={{ color: '#000000 !important' }}>Usuarios</span>
+                          <Users className="w-4 h-4 mr-2 flex-shrink-0" />
+                          <span>Usuarios</span>
                         </Button>
                       )}
                     </div>
@@ -237,13 +225,9 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                               setSelectedCategory('all');
                               setMobileMenuOpen(false);
                             }}
-                            className="w-full justify-start h-10"
-                            style={{
-                              color: '#000000 !important',
-                              fontWeight: '500'
-                            }}
+                            className="sidebar-category-button w-full justify-start h-10"
                           >
-                            <span className="flex-1 text-left" style={{ color: '#000000 !important' }}>Todas ({tutorials.length})</span>
+                            <span className="flex-1 text-left">Todas ({tutorials.length})</span>
                           </Button>
                           {categories.map((category) => {
                             const Icon = iconMap[category.icon as keyof typeof iconMap] || Settings;
@@ -257,14 +241,10 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                   setSelectedCategory(category.id);
                                   setMobileMenuOpen(false);
                                 }}
-                                className="w-full justify-start h-10"
-                                style={{
-                                  color: '#000000 !important',
-                                  fontWeight: '500'
-                                }}
+                                className="sidebar-category-button w-full justify-start h-10"
                               >
-                                <Icon className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: '#000000' }} />
-                                <span className="flex-1 text-left truncate" style={{ color: '#000000 !important' }}>{category.name} ({count})</span>
+                                <Icon className="w-4 h-4 mr-2 flex-shrink-0" />
+                                <span className="flex-1 text-left truncate">{category.name} ({count})</span>
                               </Button>
                             );
                           })}
@@ -351,32 +331,20 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                         variant={currentView === 'tutorials' ? 'default' : 'ghost'}
                         size="sm"
                         onClick={() => setCurrentView('tutorials')}
-                        className="w-full justify-start h-10 text-sm font-semibold"
-                        style={{
-                          display: 'flex',
-                          visibility: 'visible',
-                          color: currentView === 'tutorials' ? '#000000 !important' : '#000000',
-                          fontWeight: '600'
-                        }}
+                        className="sidebar-nav-button w-full justify-start h-10 text-sm font-semibold"
                       >
-                        <Play className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: '#000000' }} />
-                        <span style={{ color: '#000000 !important' }}>Tutoriales</span>
+                        <Play className="w-4 h-4 mr-2 flex-shrink-0" />
+                        <span>Tutoriales</span>
                       </Button>
                       {user.role === 'SUPERUSER' && (
                         <Button
                           variant={currentView === 'users' ? 'default' : 'ghost'}
                           size="sm"
                           onClick={() => setCurrentView('users')}
-                          className="w-full justify-start h-10 text-sm font-semibold"
-                          style={{
-                            display: 'flex',
-                            visibility: 'visible',
-                            color: currentView === 'users' ? '#000000 !important' : '#000000',
-                            fontWeight: '600'
-                          }}
+                          className="sidebar-nav-button w-full justify-start h-10 text-sm font-semibold"
                         >
-                          <Users className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: '#000000' }} />
-                          <span style={{ color: '#000000 !important' }}>Usuarios</span>
+                          <Users className="w-4 h-4 mr-2 flex-shrink-0" />
+                          <span>Usuarios</span>
                         </Button>
                       )}
                     </div>
@@ -407,13 +375,9 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                             variant={selectedCategory === 'all' ? 'default' : 'ghost'}
                             size="sm"
                             onClick={() => setSelectedCategory('all')}
-                            className="w-full justify-start h-10"
-                            style={{
-                              color: '#000000 !important',
-                              fontWeight: '500'
-                            }}
+                            className="sidebar-category-button w-full justify-start h-10"
                           >
-                            <span className="flex-1 text-left" style={{ color: '#000000 !important' }}>Todas ({tutorials.length})</span>
+                            <span className="flex-1 text-left">Todas ({tutorials.length})</span>
                           </Button>
                           {categories.map((category) => {
                             const Icon = iconMap[category.icon as keyof typeof iconMap] || Settings;
@@ -424,14 +388,10 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                 variant={selectedCategory === category.id ? 'default' : 'ghost'}
                                 size="sm"
                                 onClick={() => setSelectedCategory(category.id)}
-                                className="w-full justify-start h-10"
-                                style={{
-                                  color: '#000000 !important',
-                                  fontWeight: '500'
-                                }}
+                                className="sidebar-category-button w-full justify-start h-10"
                               >
-                                <Icon className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: '#000000' }} />
-                                <span className="flex-1 text-left truncate" style={{ color: '#000000 !important' }}>{category.name} ({count})</span>
+                                <Icon className="w-4 h-4 mr-2 flex-shrink-0" />
+                                <span className="flex-1 text-left truncate">{category.name} ({count})</span>
                               </Button>
                             );
                           })}
