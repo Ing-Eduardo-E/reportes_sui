@@ -165,11 +165,11 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                     Navegación
                   </SheetTitle>
                 </SheetHeader>
-                <div className="p-4 space-y-4 overflow-y-auto">
+                <div className="p-4 space-y-4 overflow-y-auto max-h-[calc(100vh-80px)]">
                   {/* Navegación principal */}
                   <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-gray-900">Navegación</h3>
-                    <div className="space-y-1">
+                    <h3 className="text-sm font-semibold text-gray-900 mb-3">Navegación</h3>
+                    <div className="space-y-2">
                       <Button
                         variant={currentView === 'tutorials' ? 'default' : 'ghost'}
                         size="sm"
@@ -177,10 +177,10 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                           setCurrentView('tutorials');
                           setMobileMenuOpen(false);
                         }}
-                        className="w-full justify-start"
+                        className="w-full justify-start h-10"
                       >
-                        <Play className="w-4 h-4 mr-2" />
-                        Tutoriales
+                        <Play className="w-4 h-4 mr-2 flex-shrink-0" />
+                        <span>Tutoriales</span>
                       </Button>
                       {user.role === 'SUPERUSER' && (
                         <Button
@@ -190,10 +190,10 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                             setCurrentView('users');
                             setMobileMenuOpen(false);
                           }}
-                          className="w-full justify-start"
+                          className="w-full justify-start h-10"
                         >
-                          <Users className="w-4 h-4 mr-2" />
-                          Usuarios
+                          <Users className="w-4 h-4 mr-2 flex-shrink-0" />
+                          <span>Usuarios</span>
                         </Button>
                       )}
                     </div>
@@ -203,21 +203,21 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                   {currentView === 'tutorials' && (
                     <>
                       <div className="relative">
-                        <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                        <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400 pointer-events-none" />
                         <Input
                           placeholder="Buscar tutoriales..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          className="pl-10"
+                          className="pl-10 h-10"
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <h3 className="text-sm font-medium text-gray-900 flex items-center">
-                          <Filter className="w-4 h-4 mr-2" />
+                        <h3 className="text-sm font-semibold text-gray-900 flex items-center mb-3">
+                          <Filter className="w-4 h-4 mr-2 flex-shrink-0" />
                           Categorías
                         </h3>
-                        <div className="space-y-1">
+                        <div className="space-y-2">
                           <Button
                             variant={selectedCategory === 'all' ? 'default' : 'ghost'}
                             size="sm"
@@ -225,9 +225,9 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                               setSelectedCategory('all');
                               setMobileMenuOpen(false);
                             }}
-                            className="w-full justify-start"
+                            className="w-full justify-start h-10"
                           >
-                            Todas ({tutorials.length})
+                            <span className="flex-1 text-left">Todas ({tutorials.length})</span>
                           </Button>
                           {categories.map((category) => {
                             const Icon = iconMap[category.icon as keyof typeof iconMap] || Settings;
@@ -241,10 +241,10 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                   setSelectedCategory(category.id);
                                   setMobileMenuOpen(false);
                                 }}
-                                className="w-full justify-start"
+                                className="w-full justify-start h-10"
                               >
-                                <Icon className="w-4 h-4 mr-2" />
-                                {category.name} ({count})
+                                <Icon className="w-4 h-4 mr-2 flex-shrink-0" />
+                                <span className="flex-1 text-left truncate">{category.name} ({count})</span>
                               </Button>
                             );
                           })}
@@ -320,31 +320,31 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
         <div className="flex flex-col lg:flex-row lg:w-full lg:h-full">
           {/* Sidebar - solo visible en desktop */}
           {!isMobile && (
-            <aside className="w-64 bg-white border-r border-gray-200 overflow-y-auto">
+            <aside className="w-64 bg-white border-r border-gray-200 overflow-y-auto flex-shrink-0">
               <div className="p-6">
                 <div className="space-y-4">
                   {/* Navegación principal */}
                   <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-gray-900">Navegación</h3>
-                    <div className="space-y-1">
+                    <h3 className="text-sm font-semibold text-gray-900 mb-3">Navegación</h3>
+                    <div className="space-y-2">
                       <Button
                         variant={currentView === 'tutorials' ? 'default' : 'ghost'}
                         size="sm"
                         onClick={() => setCurrentView('tutorials')}
-                        className="w-full justify-start"
+                        className="w-full justify-start h-10"
                       >
-                        <Play className="w-4 h-4 mr-2" />
-                        Tutoriales
+                        <Play className="w-4 h-4 mr-2 flex-shrink-0" />
+                        <span>Tutoriales</span>
                       </Button>
                       {user.role === 'SUPERUSER' && (
                         <Button
                           variant={currentView === 'users' ? 'default' : 'ghost'}
                           size="sm"
                           onClick={() => setCurrentView('users')}
-                          className="w-full justify-start"
+                          className="w-full justify-start h-10"
                         >
-                          <Users className="w-4 h-4 mr-2" />
-                          Usuarios
+                          <Users className="w-4 h-4 mr-2 flex-shrink-0" />
+                          <span>Usuarios</span>
                         </Button>
                       )}
                     </div>
@@ -355,29 +355,29 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                     <>
                       {/* Búsqueda */}
                       <div className="relative">
-                        <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                        <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400 pointer-events-none" />
                         <Input
                           placeholder="Buscar tutoriales..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          className="pl-10"
+                          className="pl-10 h-10"
                         />
                       </div>
 
                       {/* Filtros de categoría */}
                       <div className="space-y-2">
-                        <h3 className="text-sm font-medium text-gray-900 flex items-center">
-                          <Filter className="w-4 h-4 mr-2" />
+                        <h3 className="text-sm font-semibold text-gray-900 flex items-center mb-3">
+                          <Filter className="w-4 h-4 mr-2 flex-shrink-0" />
                           Categorías
                         </h3>
-                        <div className="space-y-1">
+                        <div className="space-y-2">
                           <Button
                             variant={selectedCategory === 'all' ? 'default' : 'ghost'}
                             size="sm"
                             onClick={() => setSelectedCategory('all')}
-                            className="w-full justify-start"
+                            className="w-full justify-start h-10"
                           >
-                            Todas ({tutorials.length})
+                            <span className="flex-1 text-left">Todas ({tutorials.length})</span>
                           </Button>
                           {categories.map((category) => {
                             const Icon = iconMap[category.icon as keyof typeof iconMap] || Settings;
@@ -388,10 +388,10 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                                 variant={selectedCategory === category.id ? 'default' : 'ghost'}
                                 size="sm"
                                 onClick={() => setSelectedCategory(category.id)}
-                                className="w-full justify-start"
+                                className="w-full justify-start h-10"
                               >
-                                <Icon className="w-4 h-4 mr-2" />
-                                {category.name} ({count})
+                                <Icon className="w-4 h-4 mr-2 flex-shrink-0" />
+                                <span className="flex-1 text-left truncate">{category.name} ({count})</span>
                               </Button>
                             );
                           })}
