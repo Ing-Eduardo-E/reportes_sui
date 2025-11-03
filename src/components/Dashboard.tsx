@@ -177,7 +177,8 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                           setCurrentView('tutorials');
                           setMobileMenuOpen(false);
                         }}
-                        className="w-full justify-start h-10"
+                        className="w-full justify-start h-10 text-sm font-medium"
+                        style={{ display: 'flex', visibility: 'visible' }}
                       >
                         <Play className="w-4 h-4 mr-2 flex-shrink-0" />
                         <span>Tutoriales</span>
@@ -190,7 +191,8 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                             setCurrentView('users');
                             setMobileMenuOpen(false);
                           }}
-                          className="w-full justify-start h-10"
+                          className="w-full justify-start h-10 text-sm font-medium"
+                          style={{ display: 'flex', visibility: 'visible' }}
                         >
                           <Users className="w-4 h-4 mr-2 flex-shrink-0" />
                           <span>Usuarios</span>
@@ -331,7 +333,8 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                         variant={currentView === 'tutorials' ? 'default' : 'ghost'}
                         size="sm"
                         onClick={() => setCurrentView('tutorials')}
-                        className="w-full justify-start h-10"
+                        className="w-full justify-start h-10 text-sm font-medium"
+                        style={{ display: 'flex', visibility: 'visible' }}
                       >
                         <Play className="w-4 h-4 mr-2 flex-shrink-0" />
                         <span>Tutoriales</span>
@@ -341,7 +344,8 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                           variant={currentView === 'users' ? 'default' : 'ghost'}
                           size="sm"
                           onClick={() => setCurrentView('users')}
-                          className="w-full justify-start h-10"
+                          className="w-full justify-start h-10 text-sm font-medium"
+                          style={{ display: 'flex', visibility: 'visible' }}
                         >
                           <Users className="w-4 h-4 mr-2 flex-shrink-0" />
                           <span>Usuarios</span>
